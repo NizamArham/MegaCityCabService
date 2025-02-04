@@ -1,0 +1,166 @@
+.full-height-card {
+  height: 70vh; /* Full height of the available space */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-icons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 24px;
+}
+
+.icon-left i,
+.icon-right i {
+  cursor: pointer;
+}
+
+.card-footer {
+  text-align: center;
+  font-size: 18px;
+}
+
+.large-text {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.subtext {
+  font-size: 14px;
+  color: gray;
+}
+
+.floating-btn-container {
+  position: fixed;
+  bottom: 65px;
+  right: 90px;
+  text-align: center;
+}
+.floating-btn {
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 65px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.floating-btn-container:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.floating-btn-container:hover::after {
+  content: "Add a new cab";
+  position: absolute;
+  bottom: 75px;
+  right: 50%;
+  transform: translateX(50%);
+  background-color: #e9ecef;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  opacity: 1;
+}
+
+.modal-header {
+  background-color: white;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-body {
+  background-color: white;
+  padding: 2rem;
+}
+
+.modal-footer {
+  border-top: 1px solid #dee2e6;
+}
+
+.btn-primary {
+  background-color: black;
+  border-color: black;
+}
+
+.btn-secondary {
+  color: #424242;
+  background-color: white;
+  border-style: none;
+}
+
+.btn-secondary:hover {
+  opacity: 0.8;
+  color: #000000;
+  background-color: white;
+  border-style: none;
+}
+
+.btn-success {
+  background-color: black;
+  border-color: black;
+  border-radius: 25px;
+  padding: 6px 25px;
+  font-size: 15px;
+}
+
+.btn-success:hover {
+  opacity: 0.9;
+  color: white;
+  background-color: #333;
+}
+
+.card {
+  border-style: none;
+}
+
+.card h5 {
+  margin-top: -10px;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-control {
+  border-style: none;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+.form-control.is-invalid:focus {
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.form-control-feedback {
+  color: #dc3545;
+}

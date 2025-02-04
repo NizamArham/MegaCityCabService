@@ -1,0 +1,163 @@
+/* Admin Home Page Styles */
+.admin-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f4f4f4;
+  flex-direction: column; /* Make the container stack its children vertically */
+}
+
+/* Header */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  border-radius: 10px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.admin-title {
+  margin-top: 10px;
+  font-size: 2rem; /* Larger font for the title */
+  font-weight: bold;
+  margin-bottom: 2px;
+  color: #333;
+  padding-left: 50px; /* Shift it to the right */
+}
+
+.admin-subtext {
+  font-size: 1rem;
+  color: #b0b0b0;
+  padding-left: 50px; /* Shift it to the right */
+}
+
+.admin-path {
+  font-size: 1rem;
+  color: #000;
+  padding-left: 50px;
+}
+
+.admin-profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 15px;
+  border-radius: 50px;
+}
+
+/* Session Expired Message */
+.session-expired-message {
+  text-align: center;
+  background-color: #ffdddd;
+  padding: 15px;
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #d9534f;
+  border: 1px solid #d9534f;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent cards from wrapping onto the next row */
+  gap: 20px; /* Optional: spacing between cards */
+}
+
+.large-card,
+.small-card {
+  background-color: #f8f9fa;
+  border-radius: 25px;
+  border-style: none;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  height: 220px; /* Adjust height */
+  position: relative;
+}
+
+.card-body {
+  padding: 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Styling for large card */
+.large-card {
+  flex: 1; /* Allow the large card to take up more space */
+  transition: transform 0.3s ease-in-out; /* Add smooth transition */
+}
+
+.large-card:hover {
+  transform: translateY(-8px);
+}
+
+/* Styling for small cards */
+.small-card {
+  flex: 1; /* Ensure small cards take up equal space */
+  max-width: 100%; /* Ensure no overflow */
+  transition: transform 0.3s ease-in-out; /* Add smooth transition */
+}
+
+.small-card:hover {
+  transform: translateY(-8px);
+}
+
+/* Card Icons: Positioning the icons on top corners */
+.card-icons {
+  position: relative;
+}
+
+.icon-left,
+.icon-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #fff; /* Default white background */
+  color: #000; /* Default icon color */
+  border-radius: 50%; /* Makes it circular */
+  padding: 10px;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.icon-left {
+  margin-top: 30px;
+  width: 60px; /* Ensures a perfect circle */
+  height: 60px;
+  left: 10px; /* Align to the left */
+}
+
+.icon-right {
+  margin-top: 20px;
+  width: 40px; /* Ensures a perfect circle */
+  height: 40px;
+  right: 10px; /* Align to the right */
+}
+
+.icon-right:hover {
+  background-color: #000; /* Black background on hover */
+  color: #fff; /* White icon color on hover */
+}
+.card-footer {
+  position: absolute;
+  bottom: 20px;
+  border-style: none;
+  left: 20px;
+  background-color: #f4f4f4;
+}
+
+.large-text {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.subtext {
+  font-size: 1rem;
+  color: #6c757d;
+  margin-top: 10px;
+  margin-bottom: 0;
+}

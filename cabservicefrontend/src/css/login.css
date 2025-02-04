@@ -1,0 +1,175 @@
+/* Body and overall layout */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-color: white;
+}
+
+/* Back Button Style - Top-left corner */
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px; /* Move to left corner */
+  width: 40px;
+  height: 40px;
+  background-color: #333; /* Blackish ash color */
+  border-radius: 50%; /* Circle shape */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  z-index: 1000; /* Make sure the button is on top of the image */
+}
+
+.back-btn svg {
+  fill: white; /* White arrow */
+  width: 20px;
+  height: 20px;
+}
+
+/* Back button hover effect */
+.back-btn:hover {
+  background-color: #555; /* Lighter shade on hover */
+}
+
+/* Main container for the login page */
+.login-page-container {
+  display: flex;
+  height: 100vh; /* Ensure full height */
+  width: 100%;
+}
+
+/* Left side with the image */
+.login-image {
+  flex: 1; /* Takes up 50% of the screen */
+  background-color: #f4f7fc;
+}
+
+.login-image img {
+  width: 100%;
+  height: 100%; /* Makes the image cover the left side */
+  object-fit: cover; /* Ensures the image covers the container */
+}
+
+/* Right side with the login form */
+.login-form {
+  flex: 1; /* Takes up the other 50% of the screen */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers content vertically */
+  align-items: center; /* Centers content horizontally */
+  background-color: white;
+  width: 60%; /* Increase the width for a spacious feel */
+  margin: auto; /* Center align */
+  box-sizing: border-box;
+}
+
+.login-form h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+.login-form p {
+  font-size: 16px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Input Field with Email Icon */
+.login-form .input-group {
+  width: 100%;
+  min-width: 350px; /* Ensure a good width */
+  max-width: 600px; /* Set a reasonable max-width */
+  background-color: #f8f9fa; /* Light gray background */
+  border-radius: 10px; /* Rounded edges */
+  overflow: hidden; /* Ensures rounded corners remain */
+  display: flex;
+  align-items: center;
+  padding: 5px 15px;
+}
+
+.login-form .input-group-text {
+  background-color: #f8f9fa;
+  border: none;
+  padding: 16px; /* Slightly increased padding */
+  font-size: 15px;
+  color: #666;
+}
+
+.login-form input[type="password"] {
+  font-size: 18px; /* Adjust the size as needed */
+}
+
+.login-form .input-group .form-control {
+  background-color: #f8f9fa;
+  border: none;
+  font-size: 15px; /* Increased font size for better visibility */
+  padding: 16px; /* Increased padding for better spacing */
+  flex: 1; /* Ensures it fills remaining space */
+  text-align: start; /* Align input text to the start */
+}
+
+.login-form .form-control:focus {
+  border: none;
+  outline: none;
+}
+
+/* Container to center the button below input */
+.login-form .btn-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Submit Button Styling */
+.login-form .btn-submit {
+  padding: 14px;
+  font-size: 16px;
+  background-color: #000000;
+  color: white;
+  border-radius: 50px; /* More rounded */
+  cursor: pointer;
+  max-width: 350px; /* Set max-width */
+  text-align: center;
+}
+
+/* Submit Button Hover Effect */
+.login-form .btn-submit:hover {
+  background-color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .login-page-container {
+    flex-direction: column; /* Stack both the image and form on smaller screens */
+  }
+
+  .login-form {
+    padding: 20px;
+    width: 80%; /* Make the form a bit smaller for mobile */
+  }
+
+  .login-image,
+  .login-form {
+    width: 100%;
+  }
+
+  .login-image img {
+    height: auto;
+  }
+
+  .login-form .input-group {
+    max-width: 100%; /* Full width on smaller screens */
+  }
+
+  .login-form .btn-submit {
+    max-width: 100%;
+  }
+}
