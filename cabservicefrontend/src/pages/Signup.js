@@ -44,7 +44,7 @@ const SignupPage = () => {
       password,
     };
 
-    fetch("http://localhost:8085/CabServiceBackend/signup", {
+    fetch("http://localhost:8080/CabServiceBackend/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

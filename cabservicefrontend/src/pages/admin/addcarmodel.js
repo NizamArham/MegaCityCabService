@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Button, Form, Card } from "react-bootstrap";
+import { Modal, Button, Form, Card,Row, Col  } from "react-bootstrap";
 
 const AddCabModal = ({ show, onHide }) => {
   const [step, setStep] = useState(1);
@@ -20,20 +20,23 @@ const AddCabModal = ({ show, onHide }) => {
   const validateStep = () => {
     let currentErrors = {};
     if (step === 1) {
-      if (!formData.brand.trim()) currentErrors.brand = "Brand is required";
-      if (!formData.model.trim()) currentErrors.model = "Model is required";
-      if (!formData.engineCapacity.trim()) currentErrors.engineCapacity = "Engine capacity is required";
-      if (!formData.color.trim()) currentErrors.color = "Color is required";
+      if (!formData.brand.trim()) currentErrors.brand = "required";
+      if (!formData.model.trim()) currentErrors.model = "required";
+      if (!formData.engineCapacity.trim()) currentErrors.engineCapacity = "required";
+      if (!formData.vehicleType || !formData.vehicleType.trim()) {
+        currentErrors.vehicleType = "Vehicle type is required";
+      }
+      if (!formData.color.trim()) currentErrors.color = "required";
     } else if (step === 2) {
       const numberPlatePattern = /^[A-Za-z]{2,3}-\d{4}$/;
       if (!formData.numberPlate.trim()) {
-        currentErrors.numberPlate = "Number plate is required";
+        currentErrors.numberPlate = "required";
       } else if (!numberPlatePattern.test(formData.numberPlate)) {
         currentErrors.numberPlate = "Invalid number plate format (e.g., AB-1234)";
       }
     } else if (step === 3) {
       if (!formData.seatCapacity.trim()) {
-        currentErrors.seatCapacity = "Seating capacity is required";
+        currentErrors.seatCapacity = "required";
       } else if (isNaN(formData.seatCapacity) || formData.seatCapacity < 1) {
         currentErrors.seatCapacity = "Enter a valid seating capacity";
       }
@@ -55,7 +58,7 @@ const AddCabModal = ({ show, onHide }) => {
   const handleSubmit = async () => {
     if (validateStep()) {
       try {
-        const response = await fetch("http://localhost:8085/CabServiceBackend/cabs", {
+        const response = await fetch("http://localhost:8080/CabServiceBackend/vehicle", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -110,11 +113,45 @@ const AddCabModal = ({ show, onHide }) => {
            <Form.Control type="text" name="model" value={formData.model} onChange={handleChange} isInvalid={!!errors.model} />
            <Form.Control.Feedback type="invalid">{errors.model}</Form.Control.Feedback>
          </Form.Group>
-         <Form.Group controlId="formEngineCapacity" className="mt-2">
-           <Form.Label>Engine Capacity</Form.Label>
-           <Form.Control type="text" name="engineCapacity" value={formData.engineCapacity} onChange={handleChange} isInvalid={!!errors.engineCapacity} />
-           <Form.Control.Feedback type="invalid">{errors.engineCapacity}</Form.Control.Feedback>
-         </Form.Group>
+
+         <Form.Group as={Row} controlId="formEngineCapacity" className="mt-2">
+  <Col sm={5}>
+    <Form.Label>Engine Capacity</Form.Label>
+    <Form.Control 
+      type="text" 
+      name="engineCapacity" 
+      value={formData.engineCapacity} 
+      onChange={handleChange} 
+      isInvalid={!!errors.engineCapacity} 
+    />
+    <Form.Control.Feedback type="invalid">
+      {errors.engineCapacity}
+    </Form.Control.Feedback>
+  </Col>
+  <Col sm={5}>
+    <Form.Label>Vehicle Type</Form.Label>
+    <Form.Select 
+      name="vehicleType" 
+      value={formData.vehicleType} 
+      onChange={handleChange} 
+      isInvalid={!!errors.vehicleType}
+    >
+      <option value="">Select Vehicle Type</option>
+      <option value="tuk">Tuk</option>
+      <option value="bike">Bike</option>
+      <option value="car">Car</option>
+      <option value="van">Van</option>
+      <option value="bus">Bus</option>
+    </Form.Select>
+    <Form.Control.Feedback type="invalid">
+      {errors.vehicleType}
+    </Form.Control.Feedback>
+  </Col>
+</Form.Group>
+
+
+
+
          <Form.Group controlId="formColor" className="mt-2">
            <Form.Label>Color</Form.Label>
            <Form.Control type="text" name="color" value={formData.color} onChange={handleChange} isInvalid={!!errors.color} />

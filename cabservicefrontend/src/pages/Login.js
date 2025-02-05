@@ -26,7 +26,7 @@ const Login = () => {
       password: password,
     };
 
-    fetch("http://localhost:8085/CabServiceBackend/login", {
+    fetch("http://localhost:8080/CabServiceBackend/login", {
       method: "POST", // POST method is being used here
       headers: {
         "Content-Type": "application/json", // Send data as JSON
