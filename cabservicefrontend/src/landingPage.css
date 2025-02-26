@@ -1,20 +1,25 @@
 /* Navbar Styles */
 .landingpage-navbar {
   margin-top: 25px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }
 
 .landingpage-navbar .navbar-brand {
   padding-left: 20px;
-  font-size: 2rem;
-  font-weight: 500;
   color: #333;
+  position: absolute;
+  left: 20px;
 }
 
-.navbar-nav.ml-auto {
+.navbar-brand img {
+  height: 150px;
   display: flex;
+  margin-top: 80px;
   align-items: center;
-  justify-content: flex-end;
-  width: 100%;
 }
 
 /* Navbar Group Box */
@@ -25,7 +30,8 @@
   background-color: #f8f9fa;
   border-radius: 50px;
   padding: 5px 20px;
-  margin-right: 20px;
+  margin-left: 600px;
+  width: 100%;
 }
 
 .nav-group .nav-item {
@@ -75,6 +81,7 @@
   align-items: center;
   background-color: #f8f9fa;
   border-radius: 50px;
+  margin-left: 20px;
   padding: 5px 15px;
 }
 
@@ -111,7 +118,7 @@
   justify-content: space-between;
   height: 100vh;
   padding: 0 80px;
-  margin-top: -60px;
+  margin-top: 80px; /* Adjust to make space for the fixed navbar */
 }
 
 .content-section img {
@@ -220,25 +227,13 @@
 
 .testimonial-text {
   font-size: 1rem;
-  color: #555;
   font-style: italic;
+  color: #555;
 }
 
 .testimonial-author {
-  text-align: right;
-  margin-top: 15px;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: bold;
   color: #333;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .testimonial-cards {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .testimonial-card {
-    width: 80%;
-  }
+  margin-top: 15px;
 }

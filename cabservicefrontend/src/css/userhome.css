@@ -1,0 +1,276 @@
+/* Navbar Styling */
+.navbar-collapse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.nav-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: 60px;
+  background-color: #f8f9fa;
+  border-radius: 50px;
+  padding: 5px 20px;
+  margin-top: 10px;
+}
+
+.nav-group .nav-item {
+  margin: 0 15px;
+}
+
+.admin-profile {
+  display: flex;
+  align-items: center;
+}
+
+/* Drop Card Styling */
+.drop-card {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 16px 24px;
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.drop-card.expanded {
+  padding: 16px 24px 40px;
+}
+
+/* Drop Fields and Titles */
+.drop-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.drop-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.drop-input-container {
+  width: 100%;
+}
+
+.drop-inputs-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.drop-input {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 10px;
+  width: 140%;
+  justify-content: space-between;
+}
+
+.drop-text {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-weight: normal;
+  padding-left: 10px;
+  background: transparent;
+  font-size: 16px;
+  color: #333;
+}
+
+.drop-icon {
+  color: #666;
+  cursor: pointer;
+  margin-left: 10px;
+}
+/* Step 1: Cab Class - Keeps It Visible Even After Selection */
+.cab-class-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+  padding: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+.cab-class-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.cab-class-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 20px;
+  border: 1px solid #333;
+  background-color: #f8f9fa;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.cab-class-btn:hover {
+  background-color: #333;
+  color: white;
+}
+
+.cab-class-btn.selected {
+  background-color: #007bff;
+  color: white;
+  border-color: #0056b3;
+  box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Lock the Cab Class Selection when one is chosen */
+.cab-class-selection.locked {
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+}
+
+/* Step 2: Vehicle Type - Expands Below Cab Class */
+.vehicle-type-selection {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.4s ease-in-out;
+}
+
+/* When a cab class is selected, make vehicle selection expand */
+.vehicle-type-selection.expanded {
+  opacity: 1;
+  max-height: 600px;
+  padding-top: 15px;
+}
+
+/* Vehicle Type - Cards */
+.vehicle-type-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.vehicle-type-card {
+  width: 120px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background-color: #f8f9fa;
+  font-weight: normal;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vehicle-type-card:hover {
+  border-color: #333;
+  transform: scale(1.05);
+}
+
+.vehicle-type-card.selected {
+  background-color: #007bff;
+  color: white;
+  border-color: #0056b3;
+  box-shadow: 0px 0px 10px rgba(0, 123, 255, 0.5);
+}
+
+/* Searching for Driver */
+.searching-driver {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  width: 30px;
+  height: 30px;
+  border: 4px solid rgba(0, 123, 255, 0.3);
+  border-top-color: #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 10px auto;
+}
+
+/* Separator Styling */
+.separator {
+  font-size: 18px;
+  color: #888;
+  position: relative;
+  z-index: 10;
+  visibility: hidden;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .drop-card {
+    width: 90%;
+    padding: 12px;
+  }
+
+  .drop-inputs-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .drop-input {
+    width: 100%;
+  }
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 4px;
+  z-index: 100;
+}
+
+.suggestion-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
+.drop-input {
+  position: relative;
+}
+
+.input-error {
+  border: 2px solid red;
+}

@@ -141,12 +141,31 @@
   background-color: #000; /* Black background on hover */
   color: #fff; /* White icon color on hover */
 }
+
 .card-footer {
   position: absolute;
   bottom: 20px;
-  border-style: none;
   left: 20px;
   background-color: #f4f4f4;
+  border-style: none;
+}
+
+.card-footer {
+  border-bottom-left-radius: 15px !important;
+}
+
+.action-btn {
+  background-color: white;
+  color: black;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.action-btn:hover {
+  background-color: #f8f9fa; /* Slightly darker on hover */
 }
 
 .large-text {
@@ -160,4 +179,34 @@
   color: #6c757d;
   margin-top: 10px;
   margin-bottom: 0;
+}
+
+.big-card {
+  min-height: 280px; /* Adjust this value to your preference */
+}
+
+.big-card .card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.map-card {
+  background: url("../images/mapimage.png") no-repeat center center;
+  background-size: cover;
+}
+
+.map-card .card-body {
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.ongoing-card {
+  background: url("../images/ongoing.PNG") no-repeat center center;
+  background-size: cover;
+}
+
+.ongoing-card .card-body {
+  padding: 20px;
+  border-radius: 8px;
 }

@@ -3,18 +3,29 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import './landingPage.css';
 
-import image from './images/image1.jpg';
+
 import LoginPage from './pages/Login';
 import SignInPage from './pages/Signup';
 import AdminHome from './pages/admin/home';
-import Cabs from "./pages/admin/cab"; 
+import UserHome from './pages/user/home';
+import Cabs from "./pages/admin/cab";
 import AdminDrivers from './pages/admin/drivers';
-import AddCabModal from './pages/admin/addcarmodel';
+import AddCabModal from './pages/admin/components/addcarmodel';
+import AddDriverModal from './pages/admin/components/adddrivermodel';
+import AdminRoutes from './pages/admin/route';
+import AddRouteModal from './pages/admin/components/addroutemodel';
+
+import Img1 from "./images/image2.jpg";
+
+import blacklogoimage from './images/MegaCityLogo.png';
+import LocationSearch from './pages/user/components/locationsearch';
 
 const Header = () => (
   <nav className="landingpage-navbar navbar navbar-expand-lg navbar-light">
     <div className="container">
-      <a className="navbar-brand" href="#">Mega City Cab</a>
+      <a className="navbar-brand" href="#">
+        <img src={blacklogoimage} alt="Mega City Cab Logo" className="logo-image" />
+      </a>
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav ml-auto">
           <div className="nav-group">
@@ -87,7 +98,7 @@ const App = () => {
           <div className="content-section container-fluid d-flex align-items-center" style={{ height: "100vh" }}>
             <div className="row w-100">
               <div className="col-md-5">
-                <img src={""} alt="Service Image" className="img-fluid rounded" />
+                <img src= {Img1} alt="Service Image" className="img-fluid rounded" />
               </div>
               <div className="col-md-7">
                 <div className="text-box">
@@ -121,11 +132,28 @@ const App = () => {
         {/* admin/cabs */}
         <Route path="/admin/cab" element={<Cabs />}/>
 
+        {/* admin/addcarmodel */}
+        <Route path="/admin/addcarmodel" element={<AddCabModal />}/>
+
         {/* admin/cabs */}
         <Route path="/admin/drivers" element={<AdminDrivers />}/>
         
-        {/* admin/addcarmodel */}
-        <Route path="/admin/addcarmodel" element={<AddCabModal />}/>
+        {/* admin/addDrivermodel */}
+        <Route path="/admin/adddrivermodel" element={<AddDriverModal />}/>
+
+        {/* admin/routes */}
+        <Route path="/admin/route" element={<AdminRoutes />}/>
+
+        {/* admin/routes/addroutesmodel */}
+        <Route path="/admin/addroutesmodel" element={<AddRouteModal />}/>
+
+
+        {/* user/home */}
+        <Route path="/user/home" element={<UserHome />}/>
+
+        {/* user/component/locationsearch */}
+        <Route path="/user/locationSearch" element={<LocationSearch />}/>
+
       </Routes>
     </div>
   );

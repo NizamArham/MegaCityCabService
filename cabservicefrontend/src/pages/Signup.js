@@ -35,16 +35,17 @@ const SignupPage = () => {
       return;
     }
 
-    const signupData = {
+    const  signupData = {
       firstName,
       lastName,
       nic,
       tp,
       email,
       password,
+      role: "passenger",
     };
 
-    fetch("http://localhost:8080/CabServiceBackend/signup", {
+    fetch("http://localhost:8080/CabService/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

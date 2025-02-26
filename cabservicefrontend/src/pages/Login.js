@@ -26,7 +26,7 @@ const Login = () => {
       password: password,
     };
 
-    fetch("http://localhost:8080/CabServiceBackend/login", {
+    fetch("http://localhost:8080/CabService/login", {
       method: "POST", // POST method is being used here
       headers: {
         "Content-Type": "application/json", // Send data as JSON
@@ -35,13 +35,14 @@ const Login = () => {
     })
       .then((response) => response.json()) // Parse the JSON response
       .then((data) => {
+        console.log("Response from server:", data); // Log the response
         if (data.status === "success") {
           // Store the JWT token in localStorage
           localStorage.setItem("authToken", data.token); // Assuming 'data.token' contains the JWT token
 
           // Check account type and navigate accordingly
-          if (data.acc_type === "customer") {
-            navigate("/customerhome");
+          if (data.acc_type === "passenger") {
+            navigate("/user/home");
           } else if (data.acc_type === "driver") {
             navigate("/driverhome");
           } else if (data.acc_type === "admin") {

@@ -4,11 +4,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../../css/adminhome.css";
 import { useNavigate } from "react-router-dom";
-import ProfileTag from "./profiletag";
+import ProfileTag from "../profiletag";
+
+import axios from "axios";
 
 const AdminHome = ({ accountType = "Admin" }) => {
   const [userEmail, setUserEmail] = useState("");
   const [sessionExpired, setSessionExpired] = useState(false);
+  const [cabCount, setCabCount] = useState(0);
+  const [driverCount, setDriverCount] = useState(0);
   const navigate = useNavigate();
   const profileRef = useRef(null);
 
@@ -33,23 +37,37 @@ const AdminHome = ({ accountType = "Admin" }) => {
       console.error("Invalid token", error);
     }
 
-    // Detect clicks outside the profile menu to reset the flip state
-    const handleClickOutside = (event) => {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        // Set flip state to false here if necessary
+    const fetchCounts = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/CabService/adminoverview");
+        console.log("Response Data:", response.data);
+        setCabCount(response.data.cabCount);
+        setDriverCount(response.data.driverCount);
+      } catch (error) {
+        console.error("Error fetching counts", error);
       }
     };
 
-    // Add event listener on mount
-    document.addEventListener("mousedown", handleClickOutside);
+    fetchCounts();
 
-    // Cleanup event listener on unmount
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        // Handle outside click if necessary
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [navigate]);
 
   const firstLetter = userEmail.charAt(0).toUpperCase();
+
+  // Handler for Add Destinations Button
+  const handleAddDestinationsClick = () => {
+    navigate("/admin/route"); // Navigate to the route page
+  };
 
   return (
     <div className="admin-container">
@@ -66,20 +84,16 @@ const AdminHome = ({ accountType = "Admin" }) => {
             <p className="admin-subtext">See all the information on this page</p>
           </div>
           <div className="admin-profile d-flex align-items-center" ref={profileRef}>
-            {/* First letter is outside of the flipping component */}
-            <div className="profile-icon">{firstLetter}</div> 
-
-            <ProfileTag
-              userEmail={userEmail}
-              accountType={accountType}
-            />
+            <div className="profile-icon">{firstLetter}</div>
+            <ProfileTag userEmail={userEmail} accountType={accountType} />
           </div>
         </header>
       )}
 
-        <div className="container mt-4">
+      <div className="container mt-4">
+        {/* First Row */}
         <div className="row">
-          {/* First Large Card */}
+          {/* Large Card */}
           <div className="col-md-6 mb-4">
             <div className="card large-card">
               <div className="card-body">
@@ -99,7 +113,7 @@ const AdminHome = ({ accountType = "Admin" }) => {
             </div>
           </div>
 
-          {/* Second Small Card */}
+          {/* Small Cards */}
           <div className="col-md-3 mb-4">
             <div className="card small-card">
               <div className="card-body">
@@ -112,14 +126,13 @@ const AdminHome = ({ accountType = "Admin" }) => {
                   </div>
                 </div>
                 <div className="card-footer">
-                  <h6 className="large-text">80</h6>
+                  <h6 className="large-text">{cabCount}</h6>
                   <p className="subtext">Total Cabs</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Third Small Card */}
           <div className="col-md-3 mb-4">
             <div className="card small-card">
               <div className="card-body">
@@ -132,15 +145,75 @@ const AdminHome = ({ accountType = "Admin" }) => {
                   </div>
                 </div>
                 <div className="card-footer">
-                  <h6 className="large-text">80</h6>
+                  <h6 className="large-text">{driverCount}</h6>
                   <p className="subtext">Total Drivers</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+
+        {/* Second Row - Same Layout */}
+        <div className="row">
+          <div className="col-md-4 mb-4">
+            <div className="card small-card big-card map-card">
+              <div className="card-body">
+                <div className="card-icons">
+                  <div className="icon-left">
+                    <i className="bi bi-map"></i>
+                  </div>
+                  <div className="icon-right" style={{ cursor: "pointer" }}>
+                    <i className="bi bi-arrow-right"></i>
+                  </div>
+                </div>
+                <div className="button-container">
+                  <button className="action-btn" onClick={handleAddDestinationsClick}>
+                    Add Destinations
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-md-3 mb-4">
+            <div className="card small-card big-card ongoing-card">
+              <div className="card-body">
+                <div className="card-icons">
+                  <div className="icon-right" style={{ cursor: "pointer" }}>
+                    <i className="bi bi-arrow-right"></i>
+                  </div>
+                </div>
+                <div className="button-container">
+                  <button className="action-btn">
+                    On Going Rides
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Large Card */}
+          <div className="col-md-5 mb-4">
+            <div className="card large-card big-card">
+              <div className="card-body">
+                <div className="card-icons">
+                  <div className="icon-left">
+                    <i className="bi bi-bar-chart"></i>
+                  </div>
+                  <div className="icon-right">
+                    <i className="bi bi-arrow-right"></i>
+                  </div>
+                </div>
+                <div className="card-footer">
+                  <h6 className="large-text">LKR 500,000</h6>
+                  <p className="subtext">Total Revenue</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
   );
 };
 
