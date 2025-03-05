@@ -38,7 +38,20 @@ const Header = ({ userEmail, accountType }) => {
   );
 };
 
-const DropCard = () => {
+const LoadingAnimation = () => {
+  return (
+    <div className="loading-container">
+      <div className="dotted-loader">
+        <div className="dot"></div>
+        <div className="dot"></div>
+        <div className="dot"></div>
+      </div>
+      <div className="loading-text">Searching for a best match...</div>
+    </div>
+  );
+};
+
+const DropCard = ({userEmail}) => {
   const [dropAddress, setDropAddress] = useState("");
   const [pickUpAddress, setPickUpAddress] = useState("");  
   const [isExpanded, setIsExpanded] = useState(false); 
@@ -147,10 +160,13 @@ const DropCard = () => {
       dropAddress,
       cabClass: selectedCabClass,
       vehicleType: type,
+      bookingStatus: 'Pending',
+      passengerEmail: userEmail,
     };
-  
+    console.log("Booking Data sent to Backend:", bookingData); // Log the booking data to check its values
+
     try {
-      const response = await fetch("http://localhost:8080/CabService/book", {
+      const response = await fetch("http://localhost:8080/CabService/createbooking", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -159,7 +175,7 @@ const DropCard = () => {
       });
   
       if (response.ok) {
-        console.log("Booking successful!");
+        console.log("Booking sent Successfully!");
       } else {
         console.error("Booking failed.");
       }
@@ -171,6 +187,7 @@ const DropCard = () => {
       setIsExpanded(false); 
     }, 500);
   };
+
   
   const cabClasses = ["Economy", "Standard", "Semi-Luxury", "Luxury"];
   const vehicleTypes = ["Sedan", "SUV", "Hatchback", "Minivan"];
@@ -294,6 +311,11 @@ const DropCard = () => {
           </div>
         </div>
       )}
+
+      {/* Step 4: Loading Animation */}
+      {selectedCabClass && selectedVehicleType && (
+        <LoadingAnimation />
+      )}
     </div>
   );
 };
@@ -338,7 +360,7 @@ const UserHome = ({ accountType = "User" }) => {
       transition: "background-image 1s ease-in-out"
     }}>
       <Header userEmail={userEmail} accountType={accountType} />
-      <DropCard />
+      <DropCard userEmail={userEmail} />
       {sessionExpired && (
         <div className="session-expired-message">
           <p>Your session has expired. Please log in again.</p>

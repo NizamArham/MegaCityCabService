@@ -1,21 +1,18 @@
 package com.cabservice.service;
 
 import com.cabservice.model.RouteModel;
-
-
-
 import com.cabservice.util.DatabaseConnection;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class RouteService {
+
+    // Adds a new route to the database
     public boolean addRoute(RouteModel route) {
         String query = "INSERT INTO routes (locationA, locationB, distance) VALUES (?, ?, ?)";
-        try (Connection connection = DatabaseConnection.getConnection(); // Use static method
+
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, route.getLocationA());
@@ -24,11 +21,13 @@ public class RouteService {
 
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace(); // Log error for debugging
-            return false;
+            e.printStackTrace();
         }
+
+        return false;
     }
 
+    // Retrieves all routes from the database
     public List<RouteModel> getAllRoutes() {
         List<RouteModel> routes = new ArrayList<>();
         String query = "SELECT * FROM routes";
@@ -38,41 +37,62 @@ public class RouteService {
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String locationA = resultSet.getString("locationA");
-                String locationB = resultSet.getString("locationB");
-                double distance = resultSet.getDouble("distance");
-
-                routes.add(new RouteModel(id, locationA, locationB, distance));
+                routes.add(new RouteModel(
+                        resultSet.getInt("id"),
+                        resultSet.getString("locationA"),
+                        resultSet.getString("locationB"),
+                        resultSet.getDouble("distance")
+                ));
             }
 
         } catch (SQLException e) {
-            e.printStackTrace(); // Log error
+            e.printStackTrace();
         }
 
         return routes;
     }
 
+    // Retrieves unique locations that match the given query prefix (case-insensitive)
     public Set<String> getMatchingLocations(String query) {
         Set<String> locations = new HashSet<>();
+        String sql = "SELECT locationA, locationB FROM routes";
 
-        // Database connection and query execution
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "SELECT locationA, locationB FROM routes";
-            try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-                while (rs.next()) {
-                    String locationA = rs.getString("locationA");
-                    String locationB = rs.getString("locationB");
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
-                    // Add locations to the set
-                    if (locationA != null && locationA.toLowerCase().startsWith(query.toLowerCase())) {
-                        locations.add(locationA);
-                    }
-                    if (locationB != null && locationB.toLowerCase().startsWith(query.toLowerCase())) {
-                        locations.add(locationB);
-                    }
+            while (rs.next()) {
+                String locationA = rs.getString("locationA");
+                String locationB = rs.getString("locationB");
+
+                if (locationA != null && locationA.toLowerCase().startsWith(query.toLowerCase())) {
+                    locations.add(locationA);
+                }
+                if (locationB != null && locationB.toLowerCase().startsWith(query.toLowerCase())) {
+                    locations.add(locationB);
                 }
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return locations;
+    }
+
+    // Retrieves all unique locations from the database, sorted alphabetically
+    public Set<String> getAllLocations() {
+        Set<String> locations = new TreeSet<>(); // TreeSet ensures uniqueness + sorting
+        String sql = "SELECT locationA, locationB FROM routes";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                Collections.addAll(locations, rs.getString("locationA"), rs.getString("locationB"));
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

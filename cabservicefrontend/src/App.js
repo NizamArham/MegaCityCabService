@@ -14,11 +14,13 @@ import AddCabModal from './pages/admin/components/addcarmodel';
 import AddDriverModal from './pages/admin/components/adddrivermodel';
 import AdminRoutes from './pages/admin/route';
 import AddRouteModal from './pages/admin/components/addroutemodel';
+import DriverHome from './pages/driver/home';
 
 import Img1 from "./images/image2.jpg";
 
 import blacklogoimage from './images/MegaCityLogo.png';
 import LocationSearch from './pages/user/components/locationsearch';
+
 
 const Header = () => (
   <nav className="landingpage-navbar navbar navbar-expand-lg navbar-light">
@@ -153,6 +155,12 @@ const App = () => {
 
         {/* user/component/locationsearch */}
         <Route path="/user/locationSearch" element={<LocationSearch />}/>
+
+
+
+        {/* driver/home */}
+        <Route path="/driver/home" element={<DriverHome />}/>
+
 
       </Routes>
     </div>

@@ -66,7 +66,7 @@ public class UserService {
 
 
     private void updateVehicleAssignedToUser(Connection conn, String assignedVehicle) {
-        String updateVehicleQuery = "UPDATE vehicles SET status = 'assigned' WHERE number_plate = ?";
+        String updateVehicleQuery = "UPDATE vehicles SET driver_status = 'assigned' WHERE number_plate = ?";
         try (PreparedStatement stmt = conn.prepareStatement(updateVehicleQuery)) {
             stmt.setString(1, assignedVehicle);  // This is the assigned vehicle's number plate
             stmt.executeUpdate();

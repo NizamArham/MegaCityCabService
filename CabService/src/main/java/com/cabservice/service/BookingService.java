@@ -6,8 +6,9 @@ import java.sql.*;
 
 public class BookingService {
 
-    public boolean saveBooking(String pickUpAddress, String dropAddress, String cabClass, String vehicleType) {
-        String sql = "INSERT INTO bookings (pickUpAddress, dropAddress, cabClass, vehicleType) VALUES (?, ?, ?, ?)";
+    public boolean saveBooking(String pickUpAddress, String dropAddress, String cabClass, String vehicleType,String bookingStatus, String PassengerEmail) {
+        String sql = "INSERT INTO bookings (pickUpAddress, dropAddress, cabClass, vehicleType, bookingStatus, passengerEmail) VALUES (?, ?, ?, ?, ?,?)";
+
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -16,6 +17,10 @@ public class BookingService {
             stmt.setString(2, dropAddress);
             stmt.setString(3, cabClass);
             stmt.setString(4, vehicleType);
+            stmt.setString(5, bookingStatus);
+            stmt.setString(6, PassengerEmail);
+
+            // Execute the insert
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {

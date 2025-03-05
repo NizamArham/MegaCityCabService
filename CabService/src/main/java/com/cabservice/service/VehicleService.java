@@ -130,7 +130,7 @@ public class VehicleService {
                 vehicle.setVehicleType(rs.getString("vehicle_type"));
                 vehicle.setCabClass(rs.getString("cabClass"));
                 vehicle.setFuelType(rs.getString("fuel_type"));
-                vehicle.setStatus(rs.getString("status"));
+                vehicle.setStatus(rs.getString("driver_status"));
 
                 vehicles.add(vehicle);
             }
