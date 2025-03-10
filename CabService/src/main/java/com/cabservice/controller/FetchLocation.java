@@ -12,12 +12,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @WebServlet("/fetchlocations")
-public class CurrentLocation extends HttpServlet {
+public class FetchLocation extends HttpServlet {
 
     private RouteService routeService = new RouteService();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Get all unique locations sorted alphabetically
+
         Set<String> locations = new TreeSet<>(routeService.getAllLocations());
 
         // Create JSON response

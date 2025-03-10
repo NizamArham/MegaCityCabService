@@ -33,7 +33,7 @@ public class BookingServlet extends HttpServlet {
         String dropAddress = jsonData.get("dropAddress");
         String cabClass = jsonData.get("cabClass");
         String vehicleType = jsonData.get("vehicleType");
-        String bookingStatus = jsonData.getOrDefault("bookingStatus", "Pending"); // Default status
+        String bookingStatus = jsonData.getOrDefault("bookingStatus", "Requested"); // Default status
         String passengerEmail = jsonData.get("passengerEmail");
 
         // Validate input

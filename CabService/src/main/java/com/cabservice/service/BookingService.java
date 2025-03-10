@@ -75,4 +75,42 @@ public class BookingService {
 
         return -1; // Return -1 if no matching route is found
     }
+    public boolean acceptRide(String bookingId, String driverEmail, String vehicle) {
+        String checkVehicleStatusSql = "SELECT ride_status FROM vehicles WHERE number_plate = ?";
+        String updateVehicleSql = "UPDATE vehicles SET ride_status = ? WHERE number_plate = ?";
+        String updateBookingSql = "UPDATE bookings SET updatedTime = CURRENT_TIMESTAMP, driver_email = ?, cab_number_plate = ?, bookingStatus = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement checkVehicleStmt = conn.prepareStatement(checkVehicleStatusSql);
+             PreparedStatement updateVehicleStmt = conn.prepareStatement(updateVehicleSql);
+             PreparedStatement updateBookingStmt = conn.prepareStatement(updateBookingSql)) {
+
+            // Check current ride status of the vehicle
+            checkVehicleStmt.setString(1, vehicle);
+            ResultSet rs = checkVehicleStmt.executeQuery();
+            if (rs.next() && "occupied".equalsIgnoreCase(rs.getString("ride_status"))) {
+                System.out.println("Driver is already in a ride!");
+                return false;
+            }
+
+            // Update vehicle ride_status to "occupied"
+            updateVehicleStmt.setString(1, "occupied");
+            updateVehicleStmt.setString(2, vehicle);
+            int vehicleUpdated = updateVehicleStmt.executeUpdate();
+
+            // Update booking details
+            updateBookingStmt.setString(1, driverEmail);
+            updateBookingStmt.setString(2, vehicle);
+            updateBookingStmt.setString(3, "occupied");
+            updateBookingStmt.setInt(4, Integer.parseInt(bookingId)); // Convert bookingId to int
+
+            int bookingUpdated = updateBookingStmt.executeUpdate();
+
+            return vehicleUpdated > 0 && bookingUpdated > 0; // Return true only if both updates succeed
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

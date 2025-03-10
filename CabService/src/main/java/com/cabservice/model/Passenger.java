@@ -6,6 +6,10 @@ public class Passenger extends User {
         super(firstName, lastName, nic, tp, email, password, assignedVehicle, accountStatus);
     }
 
+    public Passenger( String firstName, String tp, String email) {
+        super( firstName, tp, email);
+    }
+
     @Override
     public String getRole() {
         return "passenger";
