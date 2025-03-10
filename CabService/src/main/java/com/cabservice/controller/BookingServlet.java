@@ -1,5 +1,7 @@
 package com.cabservice.controller;
 
+import com.cabservice.observer.PassengerNotification;
+import com.cabservice.observer.RideStatusService;
 import com.cabservice.service.BookingService;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
@@ -8,9 +10,12 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+
 @WebServlet("/createbooking")
 public class BookingServlet extends HttpServlet {
+
     private BookingService bookingService = new BookingService();
+    private RideStatusService rideStatusService = new RideStatusService();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
@@ -42,11 +47,18 @@ public class BookingServlet extends HttpServlet {
             return;
         }
 
-        // Save booking
-        boolean success = bookingService.saveBooking(pickUpAddress, dropAddress, cabClass, vehicleType, bookingStatus , passengerEmail);
+        // Save booking and get the generated booking ID
+        int bookingId = bookingService.saveBooking(pickUpAddress, dropAddress, cabClass, vehicleType, bookingStatus, passengerEmail);
 
-        if (success) {
-            out.write("{\"status\":\"success\",\"message\":\"Booking saved successfully\"}");
+        if (bookingId > 0) {
+            // After the booking is saved, create the observer and add it
+            PassengerNotification passengerNotification = new PassengerNotification(String.valueOf(bookingId));
+            rideStatusService.addPassengerObserver(passengerNotification);
+
+            // Set the ride status to "requested" and notify the observer
+            rideStatusService.passengerRequestsRide(String.valueOf(bookingId));
+
+            out.write("{\"status\":\"success\",\"message\":\"Booking saved successfully\",\"bookingId\":\"" + bookingId + "\"}");
         } else {
             out.write("{\"status\":\"error\",\"message\":\"Database error: Could not save booking\"}");
             System.out.println("Error: Could not save booking");
