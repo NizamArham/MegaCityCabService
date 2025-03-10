@@ -5,10 +5,8 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { useNavigate } from "react-router-dom";
 import { Modal, Button, Form } from 'react-bootstrap';
 import ProfileTag from "../profiletag";
-import blacklogoimage from '../../images/MegaCityLogowhite.png';
+import blacklogoimage from '../../images/MegaCityLogo.png';
 import "../../css/driverhome.css";
-
-const images = Array.from({ length: 9 }, (_, i) => require(`../../images/image${i + 1}.jpg`));
 
 const Header = ({ userEmail, accountType }) => {
     const firstLetter = userEmail.charAt(0).toUpperCase();
@@ -42,11 +40,12 @@ const Header = ({ userEmail, accountType }) => {
 const DriverHome = ({ accountType = "Driver" }) => {
     const [userEmail, setUserEmail] = useState("");
     const [sessionExpired, setSessionExpired] = useState(false);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [showLocationModal, setShowLocationModal] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState("");
     const [currentLocation, setCurrentLocation] = useState("");
     const [locations, setLocations] = useState([]);  // Store fetched locations
+    const [rides, setRides] = useState([]);
+    const [noRides, setNoRides] = useState(false);  // State to track if no rides are available
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -67,13 +66,6 @@ const DriverHome = ({ accountType = "Driver" }) => {
     }, [navigate]);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentImageIndex(prev => (prev + 1) % images.length);
-        }, 10000);
-        return () => clearInterval(interval);
-    }, []);
-
-    useEffect(() => {
         if (userEmail && !sessionExpired) setShowLocationModal(true);
     }, [userEmail, sessionExpired]);
 
@@ -89,45 +81,128 @@ const DriverHome = ({ accountType = "Driver" }) => {
             .catch(error => console.error("Error fetching locations:", error));
     }, []);
 
+    const refreshRides = () => {
+        fetch("http://localhost:8080/CabService/CurrentLocationRides", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ userEmail, location: currentLocation })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.length === 0) {
+                setNoRides(true);
+                setRides([]);
+            } else {
+                setRides(data);
+                setNoRides(false);
+            }
+        })
+        .catch(error => console.error("Error fetching rides:", error));
+    };
+    
+
+    useEffect(() => {
+        if (currentLocation) {
+            fetch("http://localhost:8080/CabService/CurrentLocationRides", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ userEmail, location: currentLocation })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.length === 0) {
+                    setNoRides(true);
+                    setRides([]);
+                } else {
+                    setRides(data);
+                    setNoRides(false);
+                }
+            })
+            .catch(error => console.error("Error fetching rides:", error));
+        }
+    }, [currentLocation]);  // Runs whenever currentLocation changes
+    
+
     const handleLocationSubmit = () => {
         if (selectedLocation) {
             setCurrentLocation(selectedLocation);
             setShowLocationModal(false);
 
-            console.log("Selected location:", selectedLocation);
-    
+            console.log("Selected location:", selectedLocation , userEmail);
+
             // Send selected location to backend
-            fetch("http://localhost:8080/CabService/fetchlocations", {
+            fetch("http://localhost:8080/CabService/CurrentLocationRides", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ userEmail, location: selectedLocation })
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Failed to update location");
+            .then(response => response.json())
+            .then(data => {
+                if (data.length === 0) {
+                    setNoRides(true);
+                } else {
+                    setRides(data);
+                    setNoRides(false);
                 }
-                return response.json();
             })
-            .then(data => console.log("Location updated successfully:", data))
-            .catch(error => console.error("Error updating location:", error));
+            .catch(error => console.error("Error fetching rides:", error));
         }
     };
-    
 
     const handleLocationDisplayClick = () => {
         setSelectedLocation(currentLocation);
         setShowLocationModal(true);
     };
+    const handleAcceptRide = (vehicleNumber, bookingId) => {
+        console.log("Attempting to accept ride with vehicle:", vehicleNumber, "and booking ID:", bookingId);
+    
+        fetch("http://localhost:8080/CabService/acceptRide", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                vehicle: vehicleNumber,
+                driverEmail: userEmail,
+                bookingId: bookingId
+            }),
+            credentials: "include",  // Include credentials if necessary
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Failed to accept ride: " + response.statusText);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data.status === 'success') {
+                console.log("Ride accepted:", data);
+                alert("Ride accepted successfully!");
+                refreshRides();
+            } else if (data.status === 'already_in_ride') {
+                // If the rider is already in a ride, show an appropriate message
+                console.log("Rider already in a ride.");
+                alert("You are already on a ride.");
+            } else {
+                console.error("Server error:", data.message);
+                alert("You are already on a ride ");
+            }
+        })
+        .catch((error) => {
+            console.error("Network or other error:", error);
+            alert("An error occurred: " + error.message);
+        });
+    };
+    
 
     return (
-        <div className="admin-container" style={{
-            backgroundImage: `url(${images[currentImageIndex]})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            transition: "background-image 1s ease-in-out"
-        }}>
+        <div className="admin-container">
             <Header userEmail={userEmail} accountType={accountType} />
 
             {sessionExpired && (
@@ -136,56 +211,108 @@ const DriverHome = ({ accountType = "Driver" }) => {
                 </div>
             )}
 
-            <Modal
-                show={showLocationModal}
-                onHide={() => setShowLocationModal(false)}
-                centered
-                backdrop="static"
-                keyboard={false}
-            >
-                <Modal.Header>
-                    <Modal.Title> Select Your Location</Modal.Title>
-                </Modal.Header>
-                
-                <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="locationSelect">
-                            <Form.Label>Choose your current location</Form.Label>
-                            <Form.Control
-                                as="select"
-                                value={selectedLocation}
-                                onChange={(e) => setSelectedLocation(e.target.value)}
-                                required
-                            >
-                                <option value="">Choose a location</option>
-                                {locations.map((loc, index) => (
-                                    <option key={index} value={loc}>{loc}</option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
+            <div className="container custom-margin" style={{ marginTop: "1000px" }}>
+                {selectedLocation && (
+                    <div className="row">
+                        {/* Loop through rides */}
+                        {rides.length > 0 ? (
+                            rides.map((ride, index) => (
+                                <div className="col-md-3 mb-4" key={index}>
+                                    <div className="card ride-details-card shadow-sm">
+                                        <div className="card-body">
+                                            <div className="ride-header">
+                                                {/* Title and Location */}
+                                                <div className="ride-location">
+                                                    {/* "To" and Destination */}
+                                                    <div className="d-flex align-items-center mb-0">
+                                                        <p className="text-muted" style={{ fontSize: "1rem", marginRight: "5px", fontWeight: "500" }}>To</p>
+                                                        <h4 className="text-primary" style={{ fontSize: "2rem", fontWeight: "bold" }}>{ride.destination}</h4> {/* Use ride.destination */}
+                                                    </div>
+                                                    <hr />
 
-                <Modal.Footer>
-                    <Button
-                        variant="primary"
-                        onClick={handleLocationSubmit}
-                        disabled={!selectedLocation}
-                    >
-                        Set Location
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                                                    {/* "From" and Starting Location */}
+                                                    <div className="d-flex align-items-center mb-0">
+                                                        <p className="text-muted" style={{ fontSize: "1rem", marginRight: "5px", fontWeight: "500" }}>From</p>
+                                                        <p className="font-weight-bold" style={{ fontSize: "1.1rem",fontWeight: "1000" }}>{ride.pickupLocation}</p> {/* Use ride.pickupLocation */}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {/* Ride Details */}
+                                            <div className="ride-details">
+                                                {/* Passenger Info */}
+                                                <p className="mb-1" style={{ fontSize: "1rem" }}><i className="bi bi-person" style={{ marginRight: "5px" }}></i> {ride.passengerName}</p> {/* Use ride.passengerName */}
+                                                <p className="mb-1" style={{ fontSize: "1rem" }}><i className="bi bi-telephone" style={{ marginRight: "5px" }}></i> {ride.passengerContact}</p> {/* Use ride.passengerContact */}
+                                                <p className="mb-1" style={{ fontSize: "1rem" }}><i className="bi bi-envelope" style={{ marginRight: "5px" }}></i> {ride.passengerEmail}</p> {/* Use ride.passengerEmail */}
+                                            </div>
 
-            {currentLocation && (
-                <div 
-                    className="current-location-display"
-                    onClick={handleLocationDisplayClick}
+                                            {/* Button Section */}
+                                            <div className="mt-3 d-flex justify-content-center">
+                                                <button className="btn btn-success" style={{ fontSize: "1rem", padding: "10px 20px", width: "100%" }}
+                                                 onClick={() => handleAcceptRide(ride.vehicle , ride.id)}>
+                                                    Accept
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <h4>No rides available for this location at the moment.</h4>  // Display message if no rides are available
+                        )}
+                    </div>
+                )}
+
+                <Modal
+                    show={showLocationModal}
+                    onHide={() => setShowLocationModal(false)}
+                    centered
+                    backdrop="static"
+                    keyboard={false}
                 >
-                    <i className="bi bi-globe"></i>
-                    <span>{currentLocation}</span>
-                </div>
-            )}
+                    <Modal.Header>
+                        <Modal.Title> Select Your Location</Modal.Title>
+                    </Modal.Header>
+                    
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group controlId="locationSelect">
+                                <Form.Label>Choose your current location</Form.Label>
+                                <Form.Control
+                                    as="select"
+                                    value={selectedLocation}
+                                    onChange={(e) => setSelectedLocation(e.target.value)}
+                                    required
+                                >
+                                    <option value="">Choose a location</option>
+                                    {locations.map((loc, index) => (
+                                        <option key={index} value={loc}>{loc}</option>
+                                    ))}
+                                </Form.Control>
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button
+                            variant="primary"
+                            onClick={handleLocationSubmit}
+                            disabled={!selectedLocation}
+                        >
+                            Set Location
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                {currentLocation && (
+                    <div 
+                        className="current-location-display"
+                        onClick={handleLocationDisplayClick}
+                    >
+                        <i className="bi bi-globe"></i>
+                        <span>{currentLocation}</span>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

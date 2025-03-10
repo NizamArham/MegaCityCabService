@@ -1,6 +1,6 @@
 package com.cabservice.controller;
 
-import com.cabservice.model.RouteModel;
+import com.cabservice.model.Route;
 import com.cabservice.service.RouteService;
 
 import javax.servlet.ServletException;
@@ -51,7 +51,7 @@ public class RouteServlet extends HttpServlet {
         }
 
         // Create and save the route
-        RouteModel route = new RouteModel(locationA, locationB, distance);
+        Route route = new Route(locationA, locationB, distance);
         boolean success = routeService.addRoute(route);
 
         if (success) {
@@ -66,12 +66,12 @@ public class RouteServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        List<RouteModel> routes = routeService.getAllRoutes();
+        List<Route> routes = routeService.getAllRoutes();
         PrintWriter out = response.getWriter();
 
         out.write("[");
         for (int i = 0; i < routes.size(); i++) {
-            RouteModel route = routes.get(i);
+            Route route = routes.get(i);
             out.write(String.format("{\"id\":%d, \"locationA\":\"%s\", \"locationB\":\"%s\", \"distance\":%.2f}",
                     route.getId(), route.getLocationA(), route.getLocationB(), route.getDistance()));
             if (i < routes.size() - 1) {

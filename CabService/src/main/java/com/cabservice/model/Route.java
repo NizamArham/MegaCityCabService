@@ -1,19 +1,19 @@
 package com.cabservice.model;
 
-public class RouteModel {
+public class Route {
     private int id;
     private String locationA;
     private String locationB;
     private double distance;
 
-    public RouteModel(int id, String locationA, String locationB, double distance) {
+    public Route(int id, String locationA, String locationB, double distance) {
         this.id = id;
         this.locationA = locationA;
         this.locationB = locationB;
         this.distance = distance;
     }
 
-    public RouteModel(String locationA, String locationB, double distance) {
+    public Route(String locationA, String locationB, double distance) {
         this.locationA = locationA;
         this.locationB = locationB;
         this.distance = distance;

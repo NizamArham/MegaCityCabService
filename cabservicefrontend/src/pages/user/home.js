@@ -160,7 +160,7 @@ const DropCard = ({userEmail}) => {
       dropAddress,
       cabClass: selectedCabClass,
       vehicleType: type,
-      bookingStatus: 'Pending',
+      bookingStatus: 'Requested',
       passengerEmail: userEmail,
     };
     console.log("Booking Data sent to Backend:", bookingData); // Log the booking data to check its values
@@ -190,7 +190,7 @@ const DropCard = ({userEmail}) => {
 
   
   const cabClasses = ["Economy", "Standard", "Semi-Luxury", "Luxury"];
-  const vehicleTypes = ["Sedan", "SUV", "Hatchback", "Minivan"];
+  const vehicleTypes = ["Bike", "Tuktuk", "Car", "Van","Bus"];
 
   // Function to get filtered suggestions based on current input
   const handleSuggestionClick = (suggestion, type) => {

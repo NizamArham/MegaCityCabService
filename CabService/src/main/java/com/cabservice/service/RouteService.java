@@ -1,6 +1,6 @@
 package com.cabservice.service;
 
-import com.cabservice.model.RouteModel;
+import com.cabservice.model.Route;
 import com.cabservice.util.DatabaseConnection;
 
 import java.sql.*;
@@ -9,7 +9,7 @@ import java.util.*;
 public class RouteService {
 
     // Adds a new route to the database
-    public boolean addRoute(RouteModel route) {
+    public boolean addRoute(Route route) {
         String query = "INSERT INTO routes (locationA, locationB, distance) VALUES (?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -28,8 +28,8 @@ public class RouteService {
     }
 
     // Retrieves all routes from the database
-    public List<RouteModel> getAllRoutes() {
-        List<RouteModel> routes = new ArrayList<>();
+    public List<Route> getAllRoutes() {
+        List<Route> routes = new ArrayList<>();
         String query = "SELECT * FROM routes";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -37,7 +37,7 @@ public class RouteService {
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                routes.add(new RouteModel(
+                routes.add(new Route(
                         resultSet.getInt("id"),
                         resultSet.getString("locationA"),
                         resultSet.getString("locationB"),

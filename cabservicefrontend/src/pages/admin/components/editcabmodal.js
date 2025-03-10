@@ -247,7 +247,8 @@ const EditCabModal = ({ show, onHide, vehicle }) => {
                   <option value="">Select Cab Class</option>
                   <option value="luxury">Luxury</option>
                   <option value="semi-luxury">Semi-Luxury</option>
-                  <option value="normal">Normal</option>
+                  <option value="standard">Standard</option>
+                  <option value="economy">Economy</option>
                 </Form.Select>
                 <Form.Control.Feedback type="invalid">{errors.cabClass}</Form.Control.Feedback>
               </Col>

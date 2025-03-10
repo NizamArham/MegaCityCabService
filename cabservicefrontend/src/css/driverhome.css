@@ -1,3 +1,7 @@
+.custom-margin {
+  margin-top: 240px !important;
+}
+
 .current-location-display {
   position: fixed;
   bottom: 20px;
@@ -16,4 +20,33 @@
 
 .current-location-display i {
   font-size: 1.2rem;
+}
+
+.ride-details-card {
+  min-height: 300px;
+  padding: 10px;
+  border-radius: 23px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Optional: to add a subtle shadow */
+}
+
+.ride-header {
+  margin-bottom: 20px;
+}
+
+.ride-location {
+  margin-bottom: 15px;
+}
+
+.ride-details {
+  margin-bottom: 20px;
+}
+
+.ride-details p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+button.btn-success {
+  font-size: 1rem;
+  padding: 12px 20px;
 }

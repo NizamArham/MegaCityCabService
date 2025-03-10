@@ -44,7 +44,7 @@ const Login = () => {
           if (data.acc_type === "passenger") {
             navigate("/user/home");
           } else if (data.acc_type === "driver") {
-            navigate("/driverhome");
+            navigate("/driver/home");
           } else if (data.acc_type === "admin") {
             navigate("/admin/home");
           } else {
