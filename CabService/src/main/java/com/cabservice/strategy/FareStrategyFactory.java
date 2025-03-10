@@ -5,7 +5,7 @@ public class FareStrategyFactory {
         switch (vehicleType.toLowerCase()) {
             case "tuk": return new TukTukFareStrategy();
             case "car": return new CarFareStrategy();
-            case "suv": return new SUVFareStrategy();
+            case "van": return new VanFareStrategy();
             default: throw new IllegalArgumentException("Invalid vehicle type: " + vehicleType);
         }
     }

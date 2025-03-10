@@ -9,58 +9,68 @@ import java.sql.*;
 
 public class BookingService {
 
-<<<<<<< HEAD
     public int saveBooking(String pickUpAddress, String dropAddress, String cabClass, String vehicleType, String bookingStatus, String passengerEmail) {
         int bookingId = 0;
-        String sql = "INSERT INTO bookings (pickUpAddress, dropAddress, cabClass, vehicleType, bookingStatus, passengerEmail) VALUES (?, ?, ?, ?, ?, ?)";
-=======
-    public boolean saveBooking(String pickUpAddress, String dropAddress, String cabClass, String vehicleType, String bookingStatus, String passengerEmail) {
 
+        // Step 1: Calculate Distance
         double distance = calculateDistance(pickUpAddress, dropAddress);
-
-        if (distance == -1) {
-            System.out.println("Route not found in database!");
-            return false;
+        if (distance < 0) {
+            System.err.println("Error: No route found between " + pickUpAddress + " and " + dropAddress);
+            return -1; // Indicate failure
         }
 
-        FareStrategy strategy = FareStrategyFactory.getFareStrategy(vehicleType);
-        FareCalculator fareCalculator = new FareCalculator(strategy);
+        // Step 2: Get Fare Strategy and Calculate Fare
+        try {
+            FareStrategy fareStrategy = FareStrategyFactory.getFareStrategy(vehicleType);
+            FareCalculator fareCalculator = new FareCalculator(fareStrategy);
+            double estimatedFare = fareCalculator.calculateFare(distance, cabClass);
 
-        // Calculate fare
-        double fare = fareCalculator.calculateFare(distance, cabClass);
+            // Step 3: Insert Booking with Fare
+            String sqlInsert = "INSERT INTO bookings (pickUpAddress, dropAddress, cabClass, vehicleType, bookingStatus, passengerEmail, fare) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        String sql = "INSERT INTO bookings (pickUpAddress, dropAddress, cabClass, vehicleType, bookingStatus, passengerEmail, fare) VALUES (?, ?, ?, ?, ?, ?, ?)";
->>>>>>> development
+            try (Connection conn = DatabaseConnection.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                stmt.setString(1, pickUpAddress);
+                stmt.setString(2, dropAddress);
+                stmt.setString(3, cabClass);
+                stmt.setString(4, vehicleType);
+                stmt.setString(5, bookingStatus);
+                stmt.setString(6, passengerEmail);
+                stmt.setDouble(7, estimatedFare); // Save calculated fare
 
-            stmt.setString(1, pickUpAddress);
-            stmt.setString(2, dropAddress);
-            stmt.setString(3, cabClass);
-            stmt.setString(4, vehicleType);
-            stmt.setString(5, bookingStatus);
-            stmt.setString(6, passengerEmail);
-<<<<<<< HEAD
-=======
-            stmt.setDouble(7, fare); // Store calculated fare
+                int affectedRows = stmt.executeUpdate();
+                if (affectedRows > 0) {
+                    // Step 4: Retrieve the bookingId using a SELECT query based on the same credentials
+                    String sqlSelect = "SELECT id FROM bookings WHERE pickUpAddress = ? AND dropAddress = ? AND cabClass = ? AND vehicleType = ? AND bookingStatus = ? AND passengerEmail = ?";
+                    try (PreparedStatement selectStmt = conn.prepareStatement(sqlSelect)) {
+                        selectStmt.setString(1, pickUpAddress);
+                        selectStmt.setString(2, dropAddress);
+                        selectStmt.setString(3, cabClass);
+                        selectStmt.setString(4, vehicleType);
+                        selectStmt.setString(5, bookingStatus);
+                        selectStmt.setString(6, passengerEmail);
 
-            return stmt.executeUpdate() > 0;
->>>>>>> development
-
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        bookingId = generatedKeys.getInt(1); // Retrieve the auto-generated booking ID
+                        try (ResultSet rs = selectStmt.executeQuery()) {
+                            if (rs.next()) {
+                                bookingId = rs.getInt("id");
+                            }
+                        }
                     }
                 }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+        } catch (IllegalArgumentException e) {
+            System.err.println("Invalid vehicle type: " + vehicleType);
+            return -1;
         }
+
         return bookingId;
     }
+
 
     public static double calculateDistance(String pickUpAddress, String dropAddress) {
         String sql1 = "SELECT distance FROM routes WHERE locationA = ? AND locationB = ?";
@@ -92,6 +102,7 @@ public class BookingService {
 
         return -1; // Return -1 if no matching route is found
     }
+
     public boolean acceptRide(String bookingId, String driverEmail, String vehicle) {
         String checkVehicleStatusSql = "SELECT ride_status FROM vehicles WHERE number_plate = ?";
         String updateVehicleSql = "UPDATE vehicles SET ride_status = ? WHERE number_plate = ?";
@@ -129,5 +140,34 @@ public class BookingService {
             e.printStackTrace();
             return false;
         }
+
     }
+
+        public static String getBookingStatus(String bookingID) {
+            String status = null;
+            String query = "SELECT bookingStatus FROM bookings WHERE id = ?";  // SQL query
+
+            // Use try-with-resources to ensure the connection, statement, and result set are closed automatically
+            try (Connection connection = new DatabaseConnection().getConnection();
+                 PreparedStatement statement = connection.prepareStatement(query)) {
+
+                // Set the bookingID parameter
+                statement.setString(1, bookingID);
+
+                // Execute the query and get the result
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        // Retrieve the booking status from the result set
+                        status = resultSet.getString("bookingStatus");
+                    }
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();  // Log the exception for debugging purposes
+            }
+
+            // Return the status or "not found" if no status was found for the given bookingID
+            return status != null ? status : "not found";
+        }
+
 }

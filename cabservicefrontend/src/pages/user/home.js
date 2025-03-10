@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react"; // Add useRef here
+import React, { useEffect, useState, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ProfileTag from "../profiletag";
 import "../../css/userhome.css";
 import blacklogoimage from '../../images/MegaCityLogowhite.png';
+import RideStatusListener from "./components/RideStatusListener";
 
 const images = Array.from({ length: 9 }, (_, i) => require(`../../images/image${i + 1}.jpg`));
 
@@ -21,7 +22,7 @@ const Header = ({ userEmail, accountType }) => {
           <ul className="navbar-nav ml-auto">
             <div className="nav-group">
               <li className="nav-item">
-                <a className="nav-link nav-box" href="#howItWorks">Rides</a>
+              <a className="nav-link nav-box" href="/user/myride">Rides</a>
               </li>
               <li className="nav-item">
                 <a className="nav-link nav-box" href="#contactUs">Contacts</a>
@@ -38,6 +39,7 @@ const Header = ({ userEmail, accountType }) => {
   );
 };
 
+
 const LoadingAnimation = () => {
   return (
     <div className="loading-container">
@@ -49,18 +51,21 @@ const LoadingAnimation = () => {
       <div className="loading-text">Searching for a best match...</div>
     </div>
   );
+
 };
 
 const DropCard = ({userEmail}) => {
+  const [bookingID, setBookingID] = useState(null)
   const [dropAddress, setDropAddress] = useState("");
-  const [pickUpAddress, setPickUpAddress] = useState("");  
-  const [isExpanded, setIsExpanded] = useState(false); 
+  const [pickUpAddress, setPickUpAddress] = useState("");
+  const [isExpanded, setIsExpanded] = useState(false);
   const [selectedCabClass, setSelectedCabClass] = useState(null);
   const [selectedVehicleType, setSelectedVehicleType] = useState(null);
-  const [pickUpSuggestions, setPickUpSuggestions] = useState([]);  // Separate state for pickup suggestions
-  const [dropSuggestions, setDropSuggestions] = useState([]);    // Separate state for drop suggestions
-  const [noMatch, setNoMatch] = useState(false); // Track if no match found
+  const [pickUpSuggestions, setPickUpSuggestions] = useState([]);
+  const [dropSuggestions, setDropSuggestions] = useState([]);
+  const [noMatch, setNoMatch] = useState(false);
 
+  
   // Fetch suggestions from the backend API
   const fetchSuggestions = async (input, type) => {
     if (input.length > 2) { // Trigger suggestions when the input length is greater than 2
@@ -164,7 +169,7 @@ const DropCard = ({userEmail}) => {
       passengerEmail: userEmail,
     };
     console.log("Booking Data sent to Backend:", bookingData); // Log the booking data to check its values
-
+  
     try {
       const response = await fetch("http://localhost:8080/CabService/createbooking", {
         method: "POST",
@@ -175,7 +180,12 @@ const DropCard = ({userEmail}) => {
       });
   
       if (response.ok) {
-        console.log("Booking sent Successfully!");
+        const responseData = await response.json();
+        console.log("Response Data:", responseData);
+        const bookingID = responseData.bookingId;
+        console.log("Booking Success Booking ID:", bookingID);
+        setBookingID(bookingID);
+
       } else {
         console.error("Booking failed.");
       }
@@ -184,13 +194,12 @@ const DropCard = ({userEmail}) => {
     }
   
     setTimeout(() => {
-      setIsExpanded(false); 
+      setIsExpanded(false);
     }, 500);
   };
-
   
   const cabClasses = ["Economy", "Standard", "Semi-Luxury", "Luxury"];
-  const vehicleTypes = ["Bike", "Tuktuk", "Car", "Van","Bus"];
+  const vehicleTypes = ["Bike", "Tuk", "Car", "Van","Bus"];
 
   // Function to get filtered suggestions based on current input
   const handleSuggestionClick = (suggestion, type) => {
@@ -314,8 +323,10 @@ const DropCard = ({userEmail}) => {
 
       {/* Step 4: Loading Animation */}
       {selectedCabClass && selectedVehicleType && (
-        <LoadingAnimation />
-      )}
+        <LoadingAnimation />)}
+        
+      {bookingID && <RideStatusListener bookingId={bookingID} />}
+      
     </div>
   );
 };
@@ -345,6 +356,7 @@ const UserHome = ({ accountType = "User" }) => {
     }
   }, [navigate]);
 
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);

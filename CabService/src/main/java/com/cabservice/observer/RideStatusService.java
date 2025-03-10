@@ -1,33 +1,45 @@
 package com.cabservice.observer;
 
-public class RideStatusService {
-    private RideStatus rideStatus;
+import java.util.HashMap;
+import java.util.Map;
 
-    public RideStatusService() {
-        this.rideStatus = new RideStatus();
+public class RideStatusService {
+    private Map<String, RideStatus> rideStatuses = new HashMap<>();
+
+    // Ensure each booking has its own RideStatus instance
+    private RideStatus getRideStatusInstance(String bookingId) {
+        return rideStatuses.computeIfAbsent(bookingId, k -> new RideStatus());
     }
 
-    // Method to handle passenger making a ride request
+    // Passenger makes a ride request
     public void passengerRequestsRide(String bookingId) {
-        // Set the ride status to 'requested' and notify observers
+        RideStatus rideStatus = getRideStatusInstance(bookingId);
         rideStatus.setStatus("requested");
         System.out.println("Passenger made a booking with ID: " + bookingId);
     }
 
-    // Method to handle driver accepting the ride
+    // Driver accepts the ride
     public void driverAcceptsRide(String bookingId) {
-        // Set the ride status to 'accepted' and notify observers
+        RideStatus rideStatus = getRideStatusInstance(bookingId);
         rideStatus.setStatus("accepted");
         System.out.println("Driver accepted the ride for booking ID: " + bookingId);
     }
 
-    // Method to register passenger observers
-    public void addPassengerObserver(Observer observer) {
+    // Add a passenger observer for a specific booking
+    public void addPassengerObserver(String bookingId, Observer observer) {
+        RideStatus rideStatus = getRideStatusInstance(bookingId);
         rideStatus.addObserver(observer);
     }
 
-    // Method to remove passenger observers
-    public void removePassengerObserver(Observer observer) {
+    // Remove a passenger observer for a specific booking
+    public void removePassengerObserver(String bookingId, Observer observer) {
+        RideStatus rideStatus = getRideStatusInstance(bookingId);
         rideStatus.removeObserver(observer);
+    }
+
+    // Get the latest status of a ride
+    public String getRideStatus(String bookingId) {
+        RideStatus rideStatus = rideStatuses.get(bookingId);
+        return (rideStatus != null) ? rideStatus.getStatus() : "unknown";
     }
 }

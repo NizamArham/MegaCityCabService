@@ -4,26 +4,57 @@ public class Ride {
     private int rideId;
     private double fare;
     private String vehicle;
+    private String vehicleClass;
+    private String vehicleType;
+    private String bookingStatus;
+    private String bookedTime;
+    private String updatedTime;
+    private String paymentStatus;
+    private String paymentMethod;
     private String passengerName;
-    private String driver;
+    private String driverName;
+    private String driverTel;
     private String driverLocation;
     private String pickupLocation;
     private String destination;
     private String passengerContact;
     private String passengerEmail;
+    private String distance;
 
-
-    public Ride(int rideId, double fare, String vehicle, String passengerName, String driver, String driverLocation, String pickupLocation, String destination, String passengerContact, String passengerEmail) {
+    public Ride(int rideId, String pickupLocation, String destination, String bookedTime, String updatedTime, String vehicleType, String vehicleClass, String vehicle, String driverName, String driverTel, String distance, double fare, String bookingStatus) {
         this.rideId = rideId;
-        this.fare = fare;
-        this.vehicle = vehicle;
-        this.passengerName = passengerName;
-        this.driver = driver;
-        this.driverLocation = driverLocation;
         this.pickupLocation = pickupLocation;
         this.destination = destination;
-        this.passengerContact = passengerContact;
-        this.passengerEmail = passengerEmail;
+        this.bookedTime = bookedTime;
+        this.updatedTime = updatedTime;
+        this.vehicleType = vehicleType;
+        this.vehicleClass = vehicleClass;
+        this.vehicle = vehicle;
+        this.driverName = driverName;
+        this.driverTel = driverTel;
+        this.distance = distance;
+        this.fare = fare;
+        this.bookingStatus = bookingStatus;
+    }
+
+    public Ride(int rideId, String pickupLocation, String destination, String bookedTime, String updatedTime, String vehicleType, String vehicleClass, String vehicle, String driverName, String driverTel, String distance, double fare, String bookingStatus , String paymentStatus ,  String paymentMethod) {
+        this.rideId = rideId;
+        this.pickupLocation = pickupLocation;
+        this.destination = destination;
+        this.bookedTime = bookedTime;
+        this.updatedTime = updatedTime;
+        this.vehicleType = vehicleType;
+        this.vehicleClass = vehicleClass;
+        this.vehicle = vehicle;
+        this.driverName = driverName;
+        this.driverTel = driverTel;
+        this.distance = distance;
+        this.fare = fare;
+        this.bookingStatus = bookingStatus;
+        this.paymentStatus = paymentStatus;
+        this.paymentMethod = paymentMethod;
+
+
     }
 
     public Ride(int rideId, String vehicle, String passengerName, String pickupLocation, String destination, String passengerContact, String passengerEmail) {
@@ -34,6 +65,79 @@ public class Ride {
         this.destination = destination;
         this.passengerContact = passengerContact;
         this.passengerEmail = passengerEmail;
+    }
+
+
+    public String getDriverTel() {
+        return driverTel;
+    }
+
+    public void setDriverTel(String driverTel) {
+        this.driverTel = driverTel;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getVehicleClass() {
+        return vehicleClass;
+    }
+
+    public void setVehicleClass(String vehicleClass) {
+        this.vehicleClass = vehicleClass;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public String getBookingStatus() {
+        return bookingStatus;
+    }
+
+    public void setBookingStatus(String bookingStatus) {
+        this.bookingStatus = bookingStatus;
+    }
+
+    public String getBookedTime() {
+        return bookedTime;
+    }
+
+    public void setBookedTime(String bookedTime) {
+        this.bookedTime = bookedTime;
+    }
+
+    public String getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     public int getRideId() {
@@ -60,12 +164,12 @@ public class Ride {
         this.fare = fare;
     }
 
-    public String getDriver() {
-        return driver;
+    public String getDriverName() {
+        return driverName;
     }
 
-    public void setDriver(String driver) {
-        this.driver = driver;
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
     }
 
     public String getDriverLocation() {

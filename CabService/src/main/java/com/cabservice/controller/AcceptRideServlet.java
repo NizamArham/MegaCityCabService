@@ -1,6 +1,9 @@
 package com.cabservice.controller;
 
+import com.cabservice.observer.PassengerNotification;
+import com.cabservice.observer.RideStatusService;
 import com.cabservice.service.BookingService;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,11 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-
 @WebServlet("/acceptRide")
 public class AcceptRideServlet extends HttpServlet {
 
     private BookingService bookingService = new BookingService();
+    private RideStatusService rideStatusService = new RideStatusService();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,37 +32,41 @@ public class AcceptRideServlet extends HttpServlet {
             }
         }
 
-        // Parse JSON to extract parameters
-        String vehicle = null;
-        String driverEmail = null;
-        String bookingId = null;
-
-        // Simple parsing assuming JSON structure is flat and keys are "vehicle", "driverEmail", "bookingId"
-        String json = jsonString.toString();
-        if (json.contains("\"vehicle\"")) {
-            vehicle = extractJsonValue(json, "vehicle");
-        }
-        if (json.contains("\"driverEmail\"")) {
-            driverEmail = extractJsonValue(json, "driverEmail");
-        }
-        if (json.contains("\"bookingId\"")) {
-            bookingId = extractJsonValue(json, "bookingId");
-        }
+        // Extract JSON values manually
+        String json = jsonString.toString().trim();
+        String vehicle = extractJsonValue(json, "vehicle");
+        String driverEmail = extractJsonValue(json, "driverEmail");
+        String bookingId = extractJsonValue(json, "bookingId");
 
         // Validate input
-        if (driverEmail == null || vehicle == null || bookingId == null) {
+        if (vehicle == null || driverEmail == null || bookingId == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
             response.getWriter().write("{\"status\":\"error\",\"message\":\"Missing required fields\"}");
             return;
         }
 
-        // Process the booking
-        boolean success = bookingService.acceptRide(bookingId, driverEmail, vehicle);
+        try {
+            // Register observer
+            PassengerNotification passengerNotification = new PassengerNotification(bookingId);
+            rideStatusService.addPassengerObserver(bookingId,passengerNotification);
 
-        // Send response
-        if (success) {
-            response.getWriter().write("{\"status\":\"success\",\"message\":\"Booking accepted successfully\"}");
-        } else {
-            response.getWriter().write("{\"status\":\"error\",\"message\":\"Could not accept the booking\"}");
+
+            // Set ride status
+            rideStatusService.driverAcceptsRide(bookingId);
+
+            // Process booking
+            boolean success = bookingService.acceptRide(bookingId, driverEmail, vehicle);
+
+            if (success) {
+                response.getWriter().write("{\"status\":\"success\",\"message\":\"Booking accepted successfully\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("{\"status\":\"error\",\"message\":\"Could not accept the booking\"}");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Print error logs for debugging
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"status\":\"error\",\"message\":\"Internal server error\"}");
         }
     }
 

@@ -20,6 +20,9 @@ import Img1 from "./images/image2.jpg";
 
 import blacklogoimage from './images/MegaCityLogo.png';
 import LocationSearch from './pages/user/components/locationsearch';
+import PassengerMyRide from './pages/user/myride';
+import DriverMyRide from './pages/driver/myride';
+import RideStatusListener from './pages/user/components/RideStatusListener';
 
 
 const Header = () => (
@@ -156,10 +159,21 @@ const App = () => {
         {/* user/component/locationsearch */}
         <Route path="/user/locationSearch" element={<LocationSearch />}/>
 
+        {/* user/myrides */}
+        <Route path="/user/myride" element={<PassengerMyRide />}/>
+
+        {/* user/myrides */}
+        <Route path="/user/mystatus" element={<RideStatusListener />}/>
+
+
+
 
 
         {/* driver/home */}
         <Route path="/driver/home" element={<DriverHome />}/>
+
+        {/* driver/myrides */}
+        <Route path="/driver/myride" element={<DriverMyRide />}/>
 
 
       </Routes>

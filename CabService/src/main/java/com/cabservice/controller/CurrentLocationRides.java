@@ -72,7 +72,7 @@ public class CurrentLocationRides extends HttpServlet {
                 Ride ride = rides.get(i);
                 json.append("{")
                         .append("\"id\": \"").append(ride.getRideId()).append("\",")
-                        .append("\"driver\": \"").append(ride.getDriver()).append("\",")
+                        .append("\"driver\": \"").append(ride.getDriverName()).append("\",")
                         .append("\"location\": \"").append(ride.getDriverLocation()).append("\",")
                         .append("\"vehicle\": \"").append(ride.getVehicle()).append("\",")
                         .append("\"passengerName\": \"").append(ride.getPassengerName()).append("\",")

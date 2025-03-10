@@ -150,6 +150,13 @@
   border-style: none;
 }
 
+.card-footernoBg {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  border-style: none;
+}
+
 .card-footer {
   border-bottom-left-radius: 15px !important;
 }

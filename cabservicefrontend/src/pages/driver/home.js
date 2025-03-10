@@ -20,7 +20,7 @@ const Header = ({ userEmail, accountType }) => {
                     <ul className="navbar-nav ml-auto">
                         <div className="nav-group">
                             <li className="nav-item">
-                                <a className="nav-link nav-box" href="#howItWorks">Rides</a>
+                                <a className="nav-link nav-box" href="/driver/myride">Rides</a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link nav-box" href="#contactUs">Contacts</a>
@@ -161,45 +161,47 @@ const DriverHome = ({ accountType = "Driver" }) => {
     };
     const handleAcceptRide = (vehicleNumber, bookingId) => {
         console.log("Attempting to accept ride with vehicle:", vehicleNumber, "and booking ID:", bookingId);
-    
+      
         fetch("http://localhost:8080/CabService/acceptRide", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                vehicle: vehicleNumber,
-                driverEmail: userEmail,
-                bookingId: bookingId
-            }),
-            credentials: "include",  // Include credentials if necessary
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            vehicle: vehicleNumber,
+            driverEmail: userEmail, // Ensure userEmail is defined in your component
+            bookingId: bookingId,
+          }),
+          credentials: "include", // Include credentials if necessary
         })
-        .then((response) => {
+          .then((response) => {
             if (!response.ok) {
-                throw new Error("Failed to accept ride: " + response.statusText);
+              throw new Error("Failed to accept ride: " + response.statusText);
             }
             return response.json();
-        })
-        .then((data) => {
-            if (data.status === 'success') {
-                console.log("Ride accepted:", data);
-                alert("Ride accepted successfully!");
-                refreshRides();
-            } else if (data.status === 'already_in_ride') {
-                // If the rider is already in a ride, show an appropriate message
-                console.log("Rider already in a ride.");
-                alert("You are already on a ride.");
+          })
+          .then((data) => {
+            if (data.status === "success") {
+              console.log("Ride accepted:", data);
+              alert("Ride accepted successfully!");
+      
+              // Refresh the list of rides
+              refreshRides(); // Ensure refreshRides is defined
+            } else if (data.status === "already_in_ride") {
+              // Handle the case where the rider is already in a ride
+              console.log("Rider already in a ride:", data.message);
+              alert(data.message || "You are already on a ride.");
             } else {
-                console.error("Server error:", data.message);
-                alert("You are already on a ride ");
+              // Handle other server-side errors
+              console.error("Server error:", data.message);
+              alert(data.message || "An error occurred while accepting the ride.");
             }
-        })
-        .catch((error) => {
+          })
+          .catch((error) => {
             console.error("Network or other error:", error);
             alert("An error occurred: " + error.message);
-        });
-    };
-    
+          });
+      };
 
     return (
         <div className="admin-container">
