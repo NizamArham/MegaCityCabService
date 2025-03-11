@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
+
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
@@ -21,13 +22,21 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
-        if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
+        if (email == null || password == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
             out.write("{\"status\":\"error\", \"message\":\"Email and Password are required\"}");
             out.flush();
             return;
         }
 
         String authResponse = loginService.authenticateUser(email, password);
+
+        if (authResponse.contains("\"status\": \"error\"")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+        } else {
+            response.setStatus(HttpServletResponse.SC_OK); // 200 OK
+        }
+
         out.write(authResponse);
         out.flush();
     }
@@ -49,5 +58,6 @@ public class LoginServlet extends HttpServlet {
         int startIndex = keyIndex + key.length() + 4;
         int endIndex = json.indexOf("\"", startIndex);
         return endIndex > startIndex ? json.substring(startIndex, endIndex) : null;
+
     }
 }

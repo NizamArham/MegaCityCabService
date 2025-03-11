@@ -14,6 +14,11 @@ import java.util.Map;
 
 @WebServlet("/signup")
 public class SignupServlet extends HttpServlet {
+    private UserService userService;
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -42,20 +47,30 @@ public class SignupServlet extends HttpServlet {
 
         if (firstName == null || lastName == null || nic == null || tp == null || email == null || password == null || role == null) {
             out.write("{\"status\":\"error\", \"message\":\"All fields are required\"}");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
             return;
+        }
+
+
+        if (userService == null) {
+            userService = new UserService();
         }
 
         UserService userService = new UserService();
         if (userService.isUserExists(email, nic, tp)) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 status code
             out.write("{\"status\":\"error\", \"message\":\"Email, NIC, or TP already in use\"}");
             return;
         }
 
-        if (userService.createUser(role, firstName, lastName, nic, tp, email, password, assignedVehicle , "active" )) {
+        if (userService.createUser(role, firstName, lastName, nic, tp, email, password, assignedVehicle , "active")) {
             out.write("{\"status\":\"success\", \"message\":\"Signup successful\"}");
+            response.setStatus(HttpServletResponse.SC_OK); // OK
         } else {
             out.write("{\"status\":\"error\", \"message\":\"Signup failed\"}");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
         }
+
     }
 
     private Map<String, String> parseJson(String json) {
@@ -70,4 +85,6 @@ public class SignupServlet extends HttpServlet {
         }
         return data;
     }
+
+
 }
