@@ -106,7 +106,7 @@ const AdminHome = ({ accountType = "Admin" }) => {
                   </div>
                 </div>
                 <div className="card-footer">
-                  <h6 className="large-text">LKR 1,000,000</h6>
+                  <h6 className="large-text">LKR 323,002.23</h6>
                   <p className="subtext">In this month</p>
                 </div>
               </div>
@@ -193,24 +193,42 @@ const AdminHome = ({ accountType = "Admin" }) => {
           </div>
 
           {/* Large Card */}
-          <div className="col-md-5 mb-4">
-            <div className="card large-card big-card">
-              <div className="card-body">
-                <div className="card-icons">
-                  <div className="icon-left">
-                    <i className="bi bi-bar-chart"></i>
-                  </div>
-                  <div className="icon-right">
-                    <i className="bi bi-arrow-right"></i>
-                  </div>
-                </div>
-                <div className="card-footer">
-                  <h6 className="large-text">LKR 500,000</h6>
-                  <p className="subtext">Total Revenue</p>
-                </div>
-              </div>
-            </div>
+<div className="col-md-5 mb-4">
+  <div className="card large-card big-card">
+    <div className="card-body">
+      <div className="card-icons">
+        <div className="icon-left">
+          <i className="bi bi-bar-chart"></i>
+        </div>
+        <div className="icon-right">
+          <i className="bi bi-arrow-right"></i>
+        </div>
+      </div>
+      <div className="card-footer">
+        <h6 className="large-text">LKR 1,350,450.09</h6>
+        <p className="subtext">Total Revenue</p>
+        
+        {/* Small Analytics Field */}
+        <div className="analytics-field mt-3">
+          <div className="d-flex justify-content-between align-items-center">
+            <span className="analytics-text">+12%</span>
+            <span className="analytics-subtext">vs last month</span>
           </div>
+          <div className="progress mt-2">
+            <div
+              className="progress-bar"
+              role="progressbar"
+              style={{ width: "65%" }}
+              aria-valuenow="65"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
         </div>
       </div>
     </div>

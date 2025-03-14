@@ -29,7 +29,7 @@ const Header = () => (
   <nav className="landingpage-navbar navbar navbar-expand-lg navbar-light">
     <div className="container">
       <a className="navbar-brand" href="#">
-        <img src={blacklogoimage} alt="Mega City Cab Logo" className="logo-image" />
+        <img src={blacklogoimage} alt="" className="logo-image" />
       </a>
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav ml-auto">
@@ -103,7 +103,7 @@ const App = () => {
           <div className="content-section container-fluid d-flex align-items-center" style={{ height: "100vh" }}>
             <div className="row w-100">
               <div className="col-md-5">
-                <img src= {Img1} alt="Service Image" className="img-fluid rounded" />
+                <img src= {Img1} alt="" className="img-fluid rounded" />
               </div>
               <div className="col-md-7">
                 <div className="text-box">

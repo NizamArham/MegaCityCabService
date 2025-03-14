@@ -35,7 +35,7 @@ const AddCabModal = ({ show, onHide }) => {
       if (!formData.numberPlate.trim()) {
         currentErrors.numberPlate = "Required";
       } else if (!numberPlatePattern.test(formData.numberPlate)) {
-        currentErrors.numberPlate = "Invalid format (e.g., AB-1234)";
+        currentErrors.numberPlate = "Invalid format (e.g., AB-1234 or ABC-1234)";
       }
     } else if (step === 3) {
       if (!formData.seatCapacity.trim()) {

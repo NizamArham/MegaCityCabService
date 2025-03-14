@@ -90,17 +90,21 @@ const AdminCab = () => {
   }, [navigate]); // Empty dependency array to only run once
 
   const firstLetter = userEmail ? userEmail.charAt(0).toUpperCase() : '';
-
+  
   const getCabClassBadge = (cabClass) => {
     switch(cabClass) {
-      case "Luxury":
-        return <span className="badge bg-warning text-dark custom-badge">Luxury</span>;
-      case "Economy":
-        return <span className="badge bg-info text-white custom-badge">Economy</span>;
+      case "luxury":
+        return <span className="badge bg-dark text-light custom-badge">Luxury</span>; // Dark badge for Luxury
+      case "semi-luxury":
+        return <span className="badge bg-warning text-dark custom-badge">Semi Luxury</span>; // Yellowish badge for Semi Luxury
+      case "economy":
+        return <span className="badge bg-primary text-white custom-badge">Economy</span>; // Blue badge for Economy
+      case "standard":
+        return <span className="badge bg-light text-dark custom-badge">Standard</span>; // Light badge for Standard
       default:
-        return <span className="badge bg-secondary text-white custom-badge">Standard</span>;
+        return <span className="badge bg-light text-dark custom-badge">Standard</span>; // Default to Standard
     }
-  };
+};
 
   return (
     <div className="admin-container">
@@ -166,7 +170,6 @@ const AdminCab = () => {
                           </tr>
                         ))}
                       </tbody>
-
                     </table>
                   </div>
                 </div>

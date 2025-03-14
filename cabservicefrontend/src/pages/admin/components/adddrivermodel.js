@@ -60,7 +60,7 @@ const AddDriverModal = ({ show, onHide }) => {
       if (!formData.tp.trim()) currentErrors.tp = "Required";
       if (!formData.email.trim()) currentErrors.email = "Required";
       if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
-        currentErrors.email = "Invalid email format";
+        currentErrors.email = "Invalid email format (eg. 9 Digits + X/V or 12 Digits) ";
       }
       if (!formData.nic.trim()) {
         currentErrors.nic = "Required";
