@@ -6,7 +6,8 @@ public class FareStrategyFactory {
             case "tuk": return new TukTukFareStrategy();
             case "car": return new CarFareStrategy();
             case "van": return new VanFareStrategy();
-            default: throw new IllegalArgumentException("Invalid vehicle type: " + vehicleType);
+            case "bus": return new BusFareStrategy();
+            default: throw new IllegalArgumentException("Invalid vehicle type to calculate: " + vehicleType);
         }
     }
 }

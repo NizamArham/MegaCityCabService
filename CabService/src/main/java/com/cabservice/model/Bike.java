@@ -6,8 +6,4 @@ public class Bike extends Vehicle {
         super(brand, model, fuelType, powerSourceCapacity, color, numberPlate, seatCapacity, cabClass, "Bike");
     }
 
-    @Override
-    public double calculateFare(double distance) {
-        return distance * 5; // Example: Bike fare is 5 per km
-    }
 }

@@ -17,13 +17,13 @@ public class DatabaseConnection {
 
             // Establish Connection
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("✅ Database connected successfully!");
+            System.out.println("Database connected successfully!");
 
         } catch (ClassNotFoundException e) {
-            System.err.println("❌ MySQL JDBC Driver not found! Make sure the driver is included in your dependencies.");
+            System.err.println("MySQL JDBC Driver not found! Make sure the driver is included in your dependencies.");
             e.printStackTrace();
         } catch (SQLException e) {
-            System.err.println("❌ Database connection failed! Check if MySQL is running and credentials are correct.");
+            System.err.println("Database connection failed! Check if MySQL is running and credentials are correct.");
             e.printStackTrace();
         }
         return connection;

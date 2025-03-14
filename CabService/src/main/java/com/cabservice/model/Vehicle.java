@@ -117,8 +117,4 @@ public abstract class Vehicle {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public abstract double calculateFare(double distance);
-
-
 }

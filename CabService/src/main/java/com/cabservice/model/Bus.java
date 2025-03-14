@@ -5,9 +5,4 @@ public class Bus extends Vehicle {
                String numberPlate, int seatCapacity, String cabClass) {
         super(brand, model, fuelType, powerSourceCapacity, color, numberPlate, seatCapacity, cabClass, "Bus");
     }
-
-    @Override
-    public double calculateFare(double distance) {
-        return distance * 20; // Example: Bus fare is 20 per km
-    }
 }

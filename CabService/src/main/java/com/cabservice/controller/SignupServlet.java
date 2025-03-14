@@ -59,7 +59,7 @@ public class SignupServlet extends HttpServlet {
         UserService userService = new UserService();
         if (userService.isUserExists(email, nic, tp)) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 status code
-            out.write("{\"status\":\"error\", \"message\":\"Email, NIC, or TP already in use\"}");
+            out.write("{\"status\":\"error\", \"message\":\"This NIC is already registered. Please use a different NIC or log in to your existing account. \"}");
             return;
         }
 
@@ -72,6 +72,7 @@ public class SignupServlet extends HttpServlet {
         }
 
     }
+
 
     private Map<String, String> parseJson(String json) {
         Map<String, String> data = new HashMap<>();

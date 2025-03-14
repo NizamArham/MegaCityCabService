@@ -15,6 +15,7 @@ public class VehicleService {
     public boolean saveVehicle(String brand, String model, String fuelType, int powerCapacity,
                                String color, String numberPlate, int seatCapacity, String cabClass, String vehicleType) {
 
+
         if (isVehicleExists(numberPlate)) {
             return false; // Prevent duplicate vehicles
         }
@@ -114,10 +115,6 @@ public class VehicleService {
 
             while (rs.next()) {
                 Vehicle vehicle = new Vehicle() {
-                    @Override
-                    public double calculateFare(double distance) {
-                        return 0;
-                    }
                 };
 
                 vehicle.setId(rs.getInt("id"));

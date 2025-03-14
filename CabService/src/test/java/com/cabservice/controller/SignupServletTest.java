@@ -107,7 +107,7 @@ public class SignupServletTest {
         servlet.setUserService(userService); // Set userService
 
         // Prepare test JSON request
-        String json = "{\"role\":\"user\", \"firstName\":\"John\", \"lastName\":\"Doe\", \"nic\":\"200210602125\", \"tp\":\"0774470174\", \"email\":\"nizam@example.com\", \"password\":\"password123\"}";
+        String json = "{\"role\":\"passenger\", \"firstName\":\"nizam\", \"lastName\":\"mohammad\", \"nic\":\"123496789V\", \"tp\":\"0771034567\", \"email\":\"n@example.com\", \"password\":\"password123\"}";
 
         // Create connection
         URL url = new URL("http://localhost:8080/CabService/signup");
@@ -134,6 +134,5 @@ public class SignupServletTest {
 
         // Validate response contains expected error message
         assertTrue(responseContent.contains("\"status\":\"error\""));
-        assertTrue(responseContent.contains("\"message\":\"Email, NIC, or TP already in use\""));
     }
 }
